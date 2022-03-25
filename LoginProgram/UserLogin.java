@@ -4,6 +4,7 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 
 import java.util.*;
 
@@ -19,6 +20,8 @@ public class UserLogin implements Serializable
 	private String username;
 	private String password;
 	private UserLogin savedLogin;
+	ArrayList<UserLogin> users = new ArrayList<UserLogin>();
+	ArrayList<UserLogin> savedUsers;
 
 	private transient FileOutputStream outputLoginFile;
 	private transient FileInputStream inputLoginFile;
@@ -38,7 +41,7 @@ public class UserLogin implements Serializable
 		return this.password;
 	}
 
-	public void save(UserLogin object){
+	public void save(ArrayList<UserLogin> object){
 		try
 		{
 			outputLoginFile = new FileOutputStream("savedLogin.dat");
@@ -53,12 +56,12 @@ public class UserLogin implements Serializable
         }
 	}
 
-	public UserLogin load(){
+	public ArrayList<UserLogin> load(){
 		try 
 		{
 			inputLoginFile = new FileInputStream("savedLogin.dat");
 			savedUserLogin = new ObjectInputStream(inputLoginFile);
-			savedLogin = (UserLogin) savedUserLogin.readObject();
+			savedUsers = (ArrayList<UserLogin>) savedUserLogin.readObject();
 			savedUserLogin.close();
 		}
 		catch (IOException ioException)
@@ -69,6 +72,10 @@ public class UserLogin implements Serializable
         {
             System.err.println("Cannot find class");
         }
-        return savedLogin;
+        return savedUsers;
+	}
+
+	public void addLogins(ArrayList<UserLogin> storedLogins){
+		save(storedLogins);
 	}
 }
