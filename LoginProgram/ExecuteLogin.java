@@ -5,79 +5,82 @@ public class ExecuteLogin implements Serializable
 {
 	public static void main(String[] args){
 		Scanner input = new Scanner(System.in);
-		String dashesS = charMuliply(' ', 12) + charMuliply('-', 20) + "Signup" + charMuliply('-', 20);
-		String dashesL = charMuliply(' ', 12) + charMuliply('-', 20) + "Login" + charMuliply('-', 20);
- 
-		System.out.printf(charMuliply(' ', 12) + charMuliply('-', 20) + "Signup/Login" + charMuliply('-', 20) + "\nIf you dont have an account and would like to make one, type %d.\nIf you already have an account, type %d.\n" + charMuliply(' ', 12) + charMuliply('-', 20) + "Signup/Login" + charMuliply('-', 20) + "\nChoice: ", 1, 2);
+		String dashesS = charMuliply('-', 23) + "Signup" + charMuliply('-', 23);
+		String dashesL = charMuliply('-', 23) + "Login" + charMuliply('-', 24); 
+		System.out.printf("\n\n\n\n\n\n" + charMuliply(' ', 26) + charMuliply('-', 20) + "Signup/Login" + charMuliply('-', 20) + "\n\n" + charMuliply(' ', 21) + "If you dont have an account and would like to make one, type %d.\n" + charMuliply(' ', 33) + "If you already have an account, type %d.\n\n" + charMuliply(' ', 52), 1, 2);
 		int choice = input.nextInt();
 		input.nextLine();
+		System.out.println("\n" + charMuliply(' ', 26) + charMuliply('-', 20) + "Signup/Login" + charMuliply('-', 20));
 		UserLogin user = new UserLogin("", "");
 		boolean executing = true;
 
 		while(executing){
 			if(choice == 1){
-				boolean keepAdding = true;
+				boolean signingUp = true;
+				int numSignupFails = 0;
 				ArrayList<UserLogin> storedLogins = new ArrayList<UserLogin>();
-				while(keepAdding){
-					System.out.print(dashesS + "\nPlease enter a username (Username > 3 letters, Username < 10 letters, NO SPACES): ");
+				System.out.println("\n" + charMuliply(' ', 26) + dashesS);
+				while(signingUp){
+					if(numSignupFails == 0){
+					System.out.println("________________________________________________________________________________________________________________");
+					System.out.println("|                          Username > 3 letters, Username < 10 letters, NO SPACES                               |");
+					System.out.println("|                                                                                                               |");
+					System.out.println("|     Password contains at least one special character, number, and capital letter. Password > 6, NO SPACES     |");
+					System.out.println("|_______________________________________________________________________________________________________________|");
+					}
+					System.out.print("\n" + charMuliply(' ', 15) + "Please enter a username: ");
 					String username = input.nextLine();
-					System.out.print("Please enter a password (Password contains at least one special character, number, and capital letter. Password > 6, NO SPACES): ");
+					System.out.print(charMuliply(' ', 15) + "Please enter a password: ");
 					String password = input.nextLine();
-					System.out.println(dashesS);
+					System.out.println("");
 
 					ArrayList<String> problems = usernameAndPasswordCheck(username, password);
 					if(problems.size() > 0){
 						for(String i : problems){
 							System.out.println(i);
 						}
+						numSignupFails += 1;
 						continue;
 					}
 
 					UserLogin newAccount = new UserLogin(username, password);
 					storedLogins.add(newAccount);
 
-					System.out.println("\n" + charMuliply(' ', 12) + charMuliply('*', 47) + "\nCongragulations" + username + ", you have made a new account");
-					System.out.print("If you would like to create another acount type 1. If not, type 2.\n" + charMuliply(' ', 12) + charMuliply('*', 47) + "\nChoice: ");
-
-					int choice2 = input.nextInt();
-					input.nextLine();
-					if(choice2 == 1){
-						continue;
-					}
-					else{
-						keepAdding = false;
-					}
+					signingUp = false;
+					numSignupFails = 0;
 				}
 				user.addLogins(storedLogins); 
-				System.out.print(charMuliply(' ', 12) + charMuliply('-', 20) + "Signup/Exit" + charMuliply('-', 20) + "\nIf you would like to login with your new account, type 2. If you would like to exit type 3.\n" + charMuliply(' ', 12) + charMuliply('-', 20) + "Signup/Exit" + charMuliply('-', 20) + "\nChoice: ");
+				System.out.print("Congragulations! you have made a new account\nIf you would like to login with your new account, type 2. If you would like to exit type 3.\n\n" + charMuliply(' ', 52));
 				choice = input.nextInt();
 				input.nextLine();
+				System.out.println("\n" + charMuliply(' ', 26) + dashesS);
 			}
 			if(choice == 2){
 				boolean notLoggedIn = true;
-				int numFails = 0;
+				int numLoginFails = 0;
+				System.out.println("\n" + charMuliply(' ', 26) + dashesL);
 				while(notLoggedIn){
-					System.out.print(dashesL + "\nPlease enter your username: ");
+					System.out.print("\nPlease enter your username: ");
 					String username = input.nextLine();
 					System.out.print("Please enter your password: ");
 					String password = input.nextLine();
-					System.out.println(dashesL);
 
 					ArrayList<UserLogin> accounts = user.load();
 
 					for(UserLogin i : accounts){
 						if(i.getUsername().equals(username) && i.getPassword().equals(password)) {
-							System.out.println(charMuliply(' ', 12) + charMuliply('*', 47) + "\nLogin was successful\n" + charMuliply(' ', 12) + charMuliply('*', 47));
+							System.out.println("\nLogin was successful\n");
+							System.out.println(charMuliply(' ', 26) + dashesL);
 							choice = 3;
 							notLoggedIn = false;
 						}
 						else{
-							numFails += 1;
+							numLoginFails += 1;
 						}
 					}
-					if(numFails == accounts.size()){
-						System.out.println("Login failed, please try again");
-						numFails = 0;
+					if(numLoginFails == accounts.size()){
+						System.out.println("\nLogin failed, please try again");
+						numLoginFails = 0;
 					}
 				}
 			}
@@ -115,7 +118,7 @@ public class ExecuteLogin implements Serializable
 			if(i == ' '){
 				problems.add("Password cannot contain spaces");
 			}
-			if(i >= 'A' && i <= 'Z' || i >= 'a' && i <= 'z'|| i >= '0' && i <= '9' || i == ' '){
+			if(i >= 'A' && i <= 'Z' || i >= 'a' && i <= 'z'|| i >= '0' && i <= '9' || i == ' '){ //Can likely make this more optimized
 				regularChar += 1;
 			}
 			if(i >= '0' && i <= '9'){
