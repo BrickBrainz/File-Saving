@@ -1,5 +1,6 @@
 import java.io.Serializable;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.io.FileOutputStream;
@@ -10,24 +11,27 @@ import java.util.*;
 
 /**
  * 
- * @author George Guilford
+ * @author Message me if you want my name
  * @version 1.0
  * 
- * A class that tests object serialization within a login program
+ * A class that carries out object serialization within a login program
  */ 
 public class UserLogin implements Serializable
 {
-	private String username;
-	private String password;
-	private UserLogin savedLogin;
-	ArrayList<UserLogin> users = new ArrayList<UserLogin>();
+	//Instance variables
+	private String username; //Holds the username
+	private String password; //Holds the password
+	private UserLogin savedLogin; //I honestly forgot what this is for, might be for nothing
+	ArrayList<UserLogin> users = new ArrayList<UserLogin>(); //An ArrayList that holds all the users in a file
 	ArrayList<UserLogin> savedUsers;
 
+	//Object serialization variables
 	private transient FileOutputStream outputLoginFile;
 	private transient FileInputStream inputLoginFile;
 	private transient ObjectOutputStream userLogin;
 	private transient ObjectInputStream savedUserLogin;
 
+	//Constructor
 	public UserLogin(String username, String password){
 		this.username = username;
 		this.password = password;
@@ -41,6 +45,7 @@ public class UserLogin implements Serializable
 		return this.password;
 	}
 
+	//Transfers a UserLogin ArrayList into a file called savedLogin
 	public void save(ArrayList<UserLogin> object){
 		try
 		{
@@ -56,6 +61,7 @@ public class UserLogin implements Serializable
         }
 	}
 
+	//Reads the contents of savedLogin and saves it to a declared variable 
 	public ArrayList<UserLogin> load(){
 		try 
 		{
@@ -66,15 +72,16 @@ public class UserLogin implements Serializable
 		}
 		catch (IOException ioException)
         {
-            System.err.println("Error reading to file.");
+            System.err.print("");
         }
         catch (ClassNotFoundException errorClassNotFoundException)
         {
             System.err.println("Cannot find class");
         }
-        return savedUsers;
+        return savedUsers; 
 	}
 
+	//An extra-step function. It takes a UserLogin ArrayList and sends it to the save function. Probably could cut this out and make the code shorter.
 	public void addLogins(ArrayList<UserLogin> storedLogins){
 		save(storedLogins);
 	}
