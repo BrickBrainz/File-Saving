@@ -1,2 +1,2 @@
 # TesterFiles
-A repository for testing files
+A login program that saves a file to your computer using java. 
